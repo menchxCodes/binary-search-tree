@@ -39,6 +39,36 @@ class Tree
     node = Node.new(array[mid], left, right)
   end
 
+  def insert(value)
+    is_inserted = false
+    pointer = root
+    node = Node.new(value)
+    until is_inserted
+      case node <=> pointer
+      # pointer > node
+      when 1
+        if pointer.right.nil?
+          pointer.right = node
+          is_inserted = true
+        else
+          pointer = pointer.right
+        end
+      # pointer == node
+      when 0
+        puts "duplicate value"
+        is_inserted = true
+      # pointer < node
+      when -1
+        if pointer.left.nil?
+          pointer.left = node
+          is_inserted = true
+        else
+          pointer = pointer.left
+        end
+      end
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
@@ -49,4 +79,6 @@ end
 test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 
 tree = Tree.new(test)
+tree.pretty_print
+tree.insert(325)
 tree.pretty_print
