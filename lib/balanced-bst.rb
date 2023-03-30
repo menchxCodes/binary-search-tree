@@ -55,7 +55,7 @@ class Tree
         end
       # pointer == node
       when 0
-        puts "duplicate value"
+        puts 'duplicate value'
         is_inserted = true
       # pointer < node
       when -1
