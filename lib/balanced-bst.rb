@@ -103,6 +103,7 @@ class Tree
     #--TODO
     node = find(value)
     return nil if node.nil?
+
     is_found = false
     pointer = root
     previous = root
@@ -151,10 +152,41 @@ class Tree
       else
         previous.left = pointer.right
       end
+      return "successfully deleted one-child node #{pointer.value}"
     end
-    return "successfully deleted one-child node #{pointer.value}"
     # delete two child node
     # --TODO
+
+    has_two_children = !pointer.right.nil? && !pointer.left.nil?
+
+    return unless has_two_children
+
+    next_biggest = pointer.right
+    previous_next_biggest = pointer
+
+    last_left = false
+
+    until last_left
+      if next_biggest.left.nil?
+        last_left = true
+
+        if next_biggest.right.nil?
+          previous_next_biggest.left = nil
+          next_biggest.left = pointer.left
+          next_biggest.right = pointer.right
+
+          if previous < pointer
+            previous.right = next_biggest
+          else
+            previous.left = next_biggest
+          end
+        end
+      else
+        previous_next_biggest = next_biggest
+        next_biggest = next_biggest.left
+      end
+      return "successfully deleted two-child node #{pointer.value}"
+    end
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -170,8 +202,7 @@ tree = Tree.new(test)
 tree.pretty_print
 # tree.insert(23)
 
-
 p tree.delete(1)
 tree.pretty_print
-p tree.delete(23)
+p tree.delete(4)
 tree.pretty_print
