@@ -69,6 +69,40 @@ class Tree
     end
   end
 
+  def find(value)
+    is_found = false
+    pointer = root
+    node = Node.new(value)
+    until is_found
+      case node <=> pointer
+      # pointer > node
+      when 1
+        if pointer.right.nil?
+          is_found = true
+          return nil
+        else
+          pointer = pointer.right
+        end
+      # pointer == node
+      when 0
+        is_found = true
+        return pointer
+      # pointer < node
+      when -1
+        if pointer.left.nil?
+          is_found = true
+          return nil
+        else
+          pointer = pointer.left
+        end
+      end
+    end
+  end
+
+  def delete(value)
+    #--TODO
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
@@ -82,3 +116,4 @@ tree = Tree.new(test)
 tree.pretty_print
 tree.insert(325)
 tree.pretty_print
+p tree.find(64)
