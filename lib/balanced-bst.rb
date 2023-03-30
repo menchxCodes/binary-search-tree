@@ -101,6 +101,60 @@ class Tree
 
   def delete(value)
     #--TODO
+    node = find(value)
+    return nil if node.nil?
+    is_found = false
+    pointer = root
+    previous = root
+
+    until is_found
+      case node <=> pointer
+      # pointer > node
+      when 1
+        previous = pointer
+        pointer = pointer.right
+      # pointer == node
+      when 0
+        is_found = true
+      # pointer < node
+      when -1
+        previous = pointer
+        pointer = pointer.left
+      end
+    end
+    # delete node is a leaf
+    is_leaf = pointer.right.nil? && pointer.left.nil?
+    if is_leaf
+      if previous < pointer
+        previous.right = nil
+      else
+        previous.left = nil
+      end
+      return "successfully deleted leaf #{pointer.value}"
+    end
+    # delete node has 1 child
+    has_one_left_child = pointer.right.nil? && !pointer.left.nil? || !pointer.right.nil? && pointer.left.nil?
+    has_one_right_child = !pointer.right.nil? && pointer.left.nil?
+
+    if has_one_left_child
+      if previous < pointer
+        previous.right = pointer.left
+      else
+        previous.left = pointer.left
+      end
+      return "successfully deleted one-child node #{pointer.value}"
+    end
+
+    if has_one_right_child
+      if previous < pointer
+        previous.right = pointer.right
+      else
+        previous.left = pointer.right
+      end
+    end
+    return "successfully deleted one-child node #{pointer.value}"
+    # delete two child node
+    # --TODO
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -114,6 +168,10 @@ test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
 
 tree = Tree.new(test)
 tree.pretty_print
-tree.insert(325)
+# tree.insert(23)
+
+
+p tree.delete(1)
 tree.pretty_print
-p tree.find(64)
+p tree.delete(23)
+tree.pretty_print
