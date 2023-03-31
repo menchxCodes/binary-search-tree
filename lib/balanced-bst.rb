@@ -154,38 +154,42 @@ class Tree
       end
       return "successfully deleted one-child node #{pointer.value}"
     end
-    # delete two child node
-    # --TODO
 
     has_two_children = !pointer.right.nil? && !pointer.left.nil?
 
-    return unless has_two_children
+    return nil unless has_two_children
 
     next_biggest = pointer.right
     previous_next_biggest = pointer
-
     last_left = false
 
     until last_left
       if next_biggest.left.nil?
         last_left = true
 
-        if next_biggest.right.nil?
-          previous_next_biggest.left = nil
-          next_biggest.left = pointer.left
-          next_biggest.right = pointer.right
+        # detach next_biggest from previous node if there is a right tree
+        previous_next_biggest.left = next_biggest.right unless previous_next_biggest == pointer
 
-          if previous < pointer
-            previous.right = next_biggest
-          else
+        next_biggest.right = pointer.right unless previous_next_biggest == pointer
+        next_biggest.left = pointer.left
+
+        unless pointer == root
+          case previous <=> next_biggest
+          when 1
             previous.left = next_biggest
+          when -1
+            previous.right = next_biggest
           end
+        else
+          @root = next_biggest
+          return "successfully deleted root #{pointer.value}"
         end
+
+        return "successfully deleted two-child node #{pointer.value}"
       else
         previous_next_biggest = next_biggest
         next_biggest = next_biggest.left
       end
-      return "successfully deleted two-child node #{pointer.value}"
     end
   end
 
@@ -195,14 +199,17 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 end
+
 # --tests--
-test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324]
+test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324,22,21,57,65,6,2,11,10]
+
 
 tree = Tree.new(test)
+
 tree.pretty_print
-# tree.insert(23)
 
 p tree.delete(1)
 tree.pretty_print
-p tree.delete(4)
+
+p tree.delete(57)
 tree.pretty_print
