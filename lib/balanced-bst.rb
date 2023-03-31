@@ -197,15 +197,15 @@ class Tree
     # --TODO: accept block & yield
     queue = []
     queue.push(root)
-    string = ''
+    result = []
     until queue.empty?
       queue.push(queue.first.left) unless queue.first.left.nil?
       queue.push(queue.first.right) unless queue.first.right.nil?
 
-      item = queue.shift
-      string.concat("#{item.value} ")
+      node = queue.shift
+      block_given? ? yield(node) : result.push(node.value)
     end
-    puts string
+    result unless block_given?
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -226,4 +226,6 @@ tree.pretty_print
 p tree.delete(1)
 tree.pretty_print
 
-tree.level_order_iteration
+
+p tree.level_order_iteration
+tree.level_order_iteration { |node| puts node.value}
