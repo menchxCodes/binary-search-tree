@@ -193,6 +193,21 @@ class Tree
     end
   end
 
+  def level_order_iteration
+    # --TODO: accept block & yield
+    queue = []
+    queue.push(root)
+    string = ''
+    until queue.empty?
+      queue.push(queue.first.left) unless queue.first.left.nil?
+      queue.push(queue.first.right) unless queue.first.right.nil?
+
+      item = queue.shift
+      string.concat("#{item.value} ")
+    end
+    puts string
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
@@ -201,7 +216,7 @@ class Tree
 end
 
 # --tests--
-test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324,22,21,57,65,6,2,11,10]
+test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324, 22, 21, 57, 65, 6, 2, 11, 10]
 
 
 tree = Tree.new(test)
@@ -211,5 +226,4 @@ tree.pretty_print
 p tree.delete(1)
 tree.pretty_print
 
-p tree.delete(57)
-tree.pretty_print
+tree.level_order_iteration
