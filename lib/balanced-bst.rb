@@ -208,19 +208,16 @@ class Tree
     result unless block_given?
   end
 
-  def level_order_recursive(queue = [@root], result = [])
-    #-- TODO: accept block
-    if queue.empty?
-      return result
-    end
+  def level_order_recursive(queue = [@root], result = [], &block)
+    return result if queue.empty?
 
     queue.push(queue.first.left) unless queue.first.left.nil?
     queue.push(queue.first.right) unless queue.first.right.nil?
 
     node = queue.shift
-    result.push(node.value)
+    block_given? ? block.call(node) : result.push(node.value)
 
-    level_order_recursive(queue, result)
+    level_order_recursive(queue, result, &block)
   end
 
   def inorder(pointer = @root, result = [], &block)
@@ -259,8 +256,8 @@ tree.pretty_print
 # p tree.level_order_iteration
 # tree.level_order_iteration { |node| puts node.value}
 
-# p tree.level_order_recursive
-# tree.level_order_recursive { |x| puts x.value}
+p tree.level_order_recursive
+tree.level_order_recursive { |x| puts x.value}
 
-p tree.inorder
-tree.inorder { |node| puts node.value}
+# p tree.inorder
+# tree.inorder { |node| puts node.value}
