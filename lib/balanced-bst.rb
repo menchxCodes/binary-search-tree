@@ -244,6 +244,58 @@ class Tree
     block_given? ? block.call(pointer) : result.push(pointer.value)
   end
 
+  def height(value, node = find(value))
+    pointer = node
+    count = 0
+    until pointer.left.nil? && pointer.right.nil?
+      case preorder(pointer.left).size <=> preorder(pointer.right).size
+      when 1
+        pointer = pointer.left
+        count += 1
+      when 0
+        pointer = pointer.left
+        count += 1
+      when -1
+        pointer = pointer.right
+        count += 1
+      end
+    end
+    count
+  end
+
+  def depth(value)
+    count = 0
+    is_found = false
+    pointer = root
+    node = Node.new(value)
+    until is_found
+      case node <=> pointer
+      # pointer > node
+      when 1
+        if pointer.right.nil?
+          is_found = true
+          return nil
+        else
+          pointer = pointer.right
+          count += 1
+        end
+      # pointer == node
+      when 0
+        is_found = true
+        return count
+      # pointer < node
+      when -1
+        if pointer.left.nil?
+          is_found = true
+          return nil
+        else
+          pointer = pointer.left
+          count += 1
+        end
+      end
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
@@ -256,13 +308,15 @@ test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324, 22, 21, 57, 65, 6, 2, 1
 
 
 tree = Tree.new(test)
-
+tree.insert(24)
+tree.insert(25)
+tree.insert(26)
+tree.insert(27)
 tree.pretty_print
 
-p tree.delete(1)
-tree.pretty_print
 
-
+p tree.height(10)
+p tree.depth(11)
 # p tree.level_order_iteration
 # tree.level_order_iteration { |node| puts node.value}
 
@@ -275,5 +329,6 @@ tree.pretty_print
 # p tree.preorder
 # tree.preorder { |node| puts node.value}
 
-p tree.postorder
-tree.postorder { |node| puts node.value}
+# p tree.postorder
+# tree.postorder { |node| puts node.value}
+
