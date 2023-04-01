@@ -310,6 +310,12 @@ class Tree
     true
   end
 
+  def rebalance
+    unless balanced?
+      @root = build_tree(self.inorder)
+    end
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
@@ -318,16 +324,18 @@ class Tree
 end
 
 # --tests--
-test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324, 22, 21, 57, 65, 6, 2, 11, 10]
+# test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324, 22, 21, 57, 65, 6, 2, 11, 10]
 
-tree = Tree.new(test)
+# tree = Tree.new(test)
 # tree.insert(24)
 # tree.insert(25)
 # tree.insert(26)
 # tree.insert(27)
-tree.pretty_print
+# tree.pretty_print
 
-p tree.balanced?
+# p tree.balanced?
+# p tree.rebalance
+# tree.pretty_print
 # p tree.height(10)
 # p tree.depth(11)
 # p tree.level_order_iteration
