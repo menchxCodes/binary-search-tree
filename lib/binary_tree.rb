@@ -20,10 +20,8 @@ class Tree
   def initialize(array)
     @root = build_tree(array.uniq.sort)
   end
-
+  # Creates a binary search tree from an Array and returns the root.
   def build_tree(array)
-    #-TODO-
-
     if array.length == 1
       node = Node.new(array[0])
       return node
@@ -56,7 +54,7 @@ class Tree
         end
       # pointer == node
       when 0
-        puts 'duplicate value'
+        # puts 'duplicate value'
         is_inserted = true
       # pointer < node
       when -1
@@ -322,34 +320,3 @@ class Tree
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
 end
-
-# --tests--
-# test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324, 22, 21, 57, 65, 6, 2, 11, 10]
-
-# tree = Tree.new(test)
-# tree.insert(24)
-# tree.insert(25)
-# tree.insert(26)
-# tree.insert(27)
-# tree.pretty_print
-
-# p tree.balanced?
-# p tree.rebalance
-# tree.pretty_print
-# p tree.height(10)
-# p tree.depth(11)
-# p tree.level_order_iteration
-# tree.level_order_iteration { |node| puts node.value}
-
-# p tree.level_order_recursive
-# tree.level_order_recursive { |x| puts x.value}
-
-# p tree.inorder
-# tree.inorder { |node| puts node.value}
-
-# p tree.preorder
-# tree.preorder { |node| puts node.value}
-
-# p tree.postorder
-# tree.postorder { |node| puts node.value}
-
