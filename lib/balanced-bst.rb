@@ -1,3 +1,4 @@
+require 'pry-byebug'
 class Node
   include Comparable
   attr_accessor :value, :left, :right
@@ -222,6 +223,20 @@ class Tree
     level_order_recursive(queue, result)
   end
 
+  def inorder(pointer = @root, result = [], &block)
+    return result if pointer.nil?
+
+    inorder(pointer.left, result, &block)
+    block_given? ? block.call(pointer) : result.push(pointer.value)
+    inorder(pointer.right, result, &block)
+  end
+
+  def preorder
+  end
+
+  def postorder
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
@@ -241,8 +256,11 @@ p tree.delete(1)
 tree.pretty_print
 
 
-p tree.level_order_iteration
-tree.level_order_iteration { |node| puts node.value}
+# p tree.level_order_iteration
+# tree.level_order_iteration { |node| puts node.value}
 
-p tree.level_order_recursive
-tree.level_order_recursive { |x| puts x.value}
+# p tree.level_order_recursive
+# tree.level_order_recursive { |x| puts x.value}
+
+p tree.inorder
+tree.inorder { |node| puts node.value}
