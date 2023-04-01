@@ -296,6 +296,20 @@ class Tree
     end
   end
 
+  def balanced?
+    level_order_recursive do |node|
+      node.left.nil? ? left_height = 0 : left_height = height(node.left.value)
+      node.right.nil? ? right_height = 0 : right_height = height(node.right.value)
+
+      if (left_height - right_height).abs > 1
+        return false
+      else
+        next
+      end
+    end
+    true
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.value}"
@@ -306,17 +320,16 @@ end
 # --tests--
 test = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324, 22, 21, 57, 65, 6, 2, 11, 10]
 
-
 tree = Tree.new(test)
-tree.insert(24)
-tree.insert(25)
-tree.insert(26)
-tree.insert(27)
+# tree.insert(24)
+# tree.insert(25)
+# tree.insert(26)
+# tree.insert(27)
 tree.pretty_print
 
-
-p tree.height(10)
-p tree.depth(11)
+p tree.balanced?
+# p tree.height(10)
+# p tree.depth(11)
 # p tree.level_order_iteration
 # tree.level_order_iteration { |node| puts node.value}
 
