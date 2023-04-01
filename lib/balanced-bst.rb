@@ -228,7 +228,12 @@ class Tree
     inorder(pointer.right, result, &block)
   end
 
-  def preorder
+  def preorder(pointer = @root, result = [], &block)
+    return result if pointer.nil?
+
+    block_given? ? block.call(pointer) : result.push(pointer.value)
+    preorder(pointer.left, result, &block)
+    preorder(pointer.right, result, &block)
   end
 
   def postorder
@@ -256,8 +261,11 @@ tree.pretty_print
 # p tree.level_order_iteration
 # tree.level_order_iteration { |node| puts node.value}
 
-p tree.level_order_recursive
-tree.level_order_recursive { |x| puts x.value}
+# p tree.level_order_recursive
+# tree.level_order_recursive { |x| puts x.value}
 
 # p tree.inorder
 # tree.inorder { |node| puts node.value}
+
+p tree.preorder
+tree.preorder { |node| puts node.value}
