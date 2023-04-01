@@ -236,7 +236,12 @@ class Tree
     preorder(pointer.right, result, &block)
   end
 
-  def postorder
+  def postorder(pointer = @root, result = [], &block)
+    return result if pointer.nil?
+
+    postorder(pointer.left, result, &block)
+    postorder(pointer.right, result, &block)
+    block_given? ? block.call(pointer) : result.push(pointer.value)
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
@@ -267,5 +272,8 @@ tree.pretty_print
 # p tree.inorder
 # tree.inorder { |node| puts node.value}
 
-p tree.preorder
-tree.preorder { |node| puts node.value}
+# p tree.preorder
+# tree.preorder { |node| puts node.value}
+
+p tree.postorder
+tree.postorder { |node| puts node.value}
