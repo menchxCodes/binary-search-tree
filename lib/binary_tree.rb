@@ -1,4 +1,3 @@
-require 'pry-byebug'
 class Node
   include Comparable
   attr_accessor :value, :left, :right
